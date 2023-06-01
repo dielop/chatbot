@@ -1,0 +1,60 @@
+[handleMsg]:  {
+  key: {
+    remoteJid: '5493382680412@s.whatsapp.net',
+    fromMe: false,
+    id: '43FEC7D94589DE0C9EF8CF7C468B6322',
+    participant: undefined
+  },
+  messageTimestamp: 1685401848,
+  pushName: 'Mirta Sanes',
+  broadcast: false,
+  message: Message {
+    conversation: 'Hola',
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2
+    }
+  },
+  body: 'Hola',
+  from: '5493382680412'
+}
+[handleMsg]:  {
+  key: {
+    remoteJid: '5493382680412@s.whatsapp.net',
+    fromMe: false,
+    id: '5F4252385CAAC2A077E3D7B43463C56D',
+    participant: undefined
+  },
+  messageTimestamp: 1685401853,
+  pushName: 'Mirta Sanes',
+  broadcast: false,
+  message: Message {
+    conversation: 'chat',
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2
+    }
+  },
+  body: 'chat',
+  from: '5493382680412'
+}
+[handleMsg]:  {
+  key: {
+    remoteJid: '5493382680412@s.whatsapp.net',
+    fromMe: false,
+    id: '80741EA356401320541F405CB4AD6FD1',
+    participant: undefined
+  },
+  messageTimestamp: 1685401897,
+  pushName: 'Mirta Sanes',
+  broadcast: false,
+  message: Message {
+    conversation: 'menu',
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2
+    }
+  },
+  body: 'menu',
+  from: '5493382680412'
+}

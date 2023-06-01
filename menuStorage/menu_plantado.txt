@@ -1,0 +1,2 @@
+0001    Cortes de carne     Asado de res con salsa  $990, Lomo de res $890, Suprema de pollo $750, Pesca del dia $750, Salmon rosado $920
+0002    Guarniciones        Papas fritas "", Vegetales asados al Josper "", Pure rusticode papas "", Pure de calaba "",  Pure de boniato ""
