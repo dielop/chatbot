@@ -8,35 +8,39 @@ const MySQLAdapter = require('@bot-whatsapp/database/mysql')
 const express = require ('express');
 const { Configuration, OpenAIApi } = require("openai");
 const { flowChatGPT, flowServiciosGPT }  = require('./src/chatGPT/chatGPT');
-const { sendEmail } = require('./src/envioEmail/envioEmail.js');
+const { sendEmail } = require('./src/notificaciones/envioEmail.js');
+const { brevoConnection } = require('./src/notificaciones/conexionBrevo.js');
 //----------------------------------------------------------------//
 
-// Servidor express
+// Servidor express ...
 const webApp = express();
 webApp.use(express.urlencoded({
     extended: true
 }));
 webApp.use(express.json());
 
-// puertos
+// Puertos ...
 const PORT = process.env.PORT || 6000;
 
 // DialogFlow CX
 const { createBotDialog } = require('@bot-whatsapp/contexts/dialogflowcx');
 
-// Inicializamos ChatGPT 
+// Inicializamos ChatGPT  ...
 const configuration = new Configuration({
     apiKey: process.env.CHATGPT_APIKEY,
 });
 
 const openai = new OpenAIApi(configuration);
 
-// Conexión con MySQL
+// Conexión con MySQL ...
 const MYSQL_DB_HOST = process.env.DB_HOST
 const MYSQL_DB_USER = process.env.DB_USER
 const MYSQL_DB_PASSWORD = process.env.DB_PASSWORD
 const MYSQL_DB_NAME = process.env.DB_NAME
 const MYSQL_DB_PORT = process.env.DB_PORT
+
+// conexion con brevo ...
+brevoConnection();
 
 // Contexto inicial chatGPT ...
 async function procesamientoContexto(){
@@ -77,6 +81,13 @@ const textGeneration = async (prompt) => {
     }
 }
 
+// funcion para retardo de tiempo ...
+const delay = (ms) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+};
+
 const main = async () => {
     const adapterDB = new MySQLAdapter({
         host: MYSQL_DB_HOST,
@@ -103,17 +114,18 @@ const main = async () => {
     webApp.post('/serviciosChatgpt', (req, res) => flowServiciosGPT(req, res, openai));
 
     // Configuración y flujo de envios de emails
-    webApp.post('/enviarNotificacionEmail', (req,res) => {
+    webApp.post('/enviarNotificacionEmail', async (req,res) => {
         const informacion = req.body;
-        console.log(JSON.stringify(informacion));
-        console.log(ctx);
+        //console.log(JSON.stringify(informacion));
+        //console.log(ctx);
+        await sendEmail();
         return;
-    })  
+    }) 
 
     // log de funcionamiento de puerto ...
     webApp.listen(PORT, ()=> {
         console.log(`Server running at ${PORT}`);
-    })
+    })   
 
     // QR web ...
     QRPortalWeb()
