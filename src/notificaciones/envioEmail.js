@@ -1,7 +1,7 @@
 const Brevo = require('@getbrevo/brevo');
 
 // Creación de nueva campaña y envio de email ... 
-const sendEmail = async () => {
+const sendEmail = async (consulta) => {
     const now = new Date();
     const scheduledTime = new Date(now.getTime() + 15 * 1000); // Agregar 10 minutos a la fecha y hora actual
     const scheduledAt = scheduledTime.toISOString(); // Convertir la fecha y hora en formato ISO 8601
@@ -9,7 +9,7 @@ const sendEmail = async () => {
     const newCampaignContent = {
         name: 'Nueva Campaña',
         subject: 'Pruebas',
-        htmlContent: '<p>Nueva campaña de correo electrónico desde la api.</p>',
+        htmlContent: `<p>Consulta: ${consulta}</p>`,
         sender: {
           name: 'Cala Projects',
           email: 'pruebasdesarollo123@gmail.com'

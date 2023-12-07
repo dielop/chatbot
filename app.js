@@ -22,7 +22,7 @@ webApp.use(express.json());
 // Puertos ...
 const PORT = process.env.PORT || 6000;
 
-// DialogFlow CX
+// DialogFlow CX ...
 const { createBotDialog } = require('@bot-whatsapp/contexts/dialogflowcx');
 
 // Inicializamos ChatGPT  ...
@@ -33,11 +33,11 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 // Conexión con MySQL ...
-const MYSQL_DB_HOST = process.env.DB_HOST
-const MYSQL_DB_USER = process.env.DB_USER
+const MYSQL_DB_HOST     = process.env.DB_HOST
+const MYSQL_DB_USER     = process.env.DB_USER
 const MYSQL_DB_PASSWORD = process.env.DB_PASSWORD
-const MYSQL_DB_NAME = process.env.DB_NAME
-const MYSQL_DB_PORT = process.env.DB_PORT
+const MYSQL_DB_NAME     = process.env.DB_NAME
+const MYSQL_DB_PORT     = process.env.DB_PORT
 
 // conexion con brevo ...
 brevoConnection();
@@ -51,9 +51,10 @@ async function procesamientoContexto(){
         let contexto = 'Habla como recepcionista del Hotel Hyatt Centric Montevideo, saluda de manera cortés de acuerdo a la hora actual. Proporciona información basada en la consulta y, si no la sabes, solicita una reformulación. Si no desea continuar, despídete. Información útil: Hotel Hyatt Centric Montevideo ubicado en Montevideo, Uruguay. No respondas otra información que no sea del hotel.' +
         'Dirección: Rambla República del Perú 1479, 11300 Montevideo, Uruguay. Teléfonos de contacto: Tel:+598 2621 1234, Fax:+598 2621 1235. Servicios y amenidades del hotel incluyen: acceso a internet libre, check-in digital, servicio a la habitación, amigable con animales, piscina, gimnasio, restaurante, bar, cafetería, lavandería y conserjes.' + 
         'Horarios de check-in: 03:00pm, horario de check-out: 12:00pm. Horario del Moderno Bar: Lunes a Sábados de 07:00pm a 11:00pm, teléfono: 59826211232. Horario del restaurante Plantado: Desayunos: Lunes a Viernes: 06.30am a 10:30am, sábados y domingos 07:30am a 11:00am, almuerzos: Lunes a Sábados: 12:00pm a 03:00pm, cenas: 07:00pm a 11:00pm.' +
-        `Links a las cartas del Plantado: ${plantado}, Moderno: ${moderno} y Deli: ${deli}. Responde con un OK si se entendio todo el contexto.`
+        `Links a las cartas del Plantado: ${plantado}, Moderno: ${moderno} y Deli: ${deli}. Responde solo con un OK si se entendio todo el contexto.`
 
-        await textGeneration(contexto); 
+        const conectChatGPT = await textGeneration(contexto);
+        console.log(conectChatGPT);
 }
 
 const textGeneration = async (prompt) => {
@@ -88,6 +89,7 @@ const delay = (ms) => {
     });
 };
 
+// funcion principal ...
 const main = async () => {
     const adapterDB = new MySQLAdapter({
         host: MYSQL_DB_HOST,
@@ -115,23 +117,21 @@ const main = async () => {
 
     // Configuración y flujo de envios de emails
     webApp.post('/enviarNotificacionEmail', async (req,res) => {
-        const informacion = req.body;
-        //console.log(JSON.stringify(informacion));
-        //console.log(ctx);
-        await sendEmail();
-        return;
+        const consulta = req.body;
+        console.log(consulta.text);
+        await sendEmail(consulta.text);
     }) 
 
     // log de funcionamiento de puerto ...
     webApp.listen(PORT, ()=> {
         console.log(`Server running at ${PORT}`);
-    })   
-
-    // QR web ...
-    QRPortalWeb()
+    })  
     
     // Generar contexto ...
     procesamientoContexto();
+
+    // QR web ...
+    QRPortalWeb()
 }
 
 main()
